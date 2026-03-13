@@ -1,75 +1,47 @@
-import {
-  isRouteErrorResponse,
-  Links,
-  Meta,
-  Outlet,
-  Scripts,
-  ScrollRestoration,
-} from "react-router";
-
-import type { Route } from "./+types/root";
+import { Outlet, Link } from "react-router";
 import "./app.css";
 
-export const links: Route.LinksFunction = () => [
-  { rel: "preconnect", href: "https://fonts.googleapis.com" },
-  {
-    rel: "preconnect",
-    href: "https://fonts.gstatic.com",
-    crossOrigin: "anonymous",
-  },
-  {
-    rel: "stylesheet",
-    href: "https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap",
-  },
-];
-
-export function Layout({ children }: { children: React.ReactNode }) {
+export default function Root() {
   return (
-    <html lang="en">
-      <head>
-        <meta charSet="utf-8" />
-        <meta name="viewport" content="width=device-width, initial-scale=1" />
-        <Meta />
-        <Links />
-      </head>
-      <body>
-        {children}
-        <ScrollRestoration />
-        <Scripts />
-      </body>
-    </html>
-  );
-}
+    <div className="min-h-screen bg-gray-100 font-sans">
+      {/* Header */}
+      <header className="bg-slate-800 text-white px-10 py-4 flex justify-between items-center">
+        <h2 className="text-xl font-bold">My Concert App</h2>
 
-export default function App() {
-  return <Outlet />;
-}
+        <nav className="flex gap-6">
+          <Link className="hover:text-gray-300" to="/">
+            Home
+          </Link>
+          <Link className="hover:text-gray-300" to="/about">
+            About
+          </Link>
+          <Link className="hover:text-gray-300" to="/concerts">
+            Concerts
+          </Link>
+          <Link className="hover:text-gray-300" to="/concerts/trending">
+            Trending
+          </Link>
+          <Link className="hover:text-gray-300" to="/login">
+            Login
+          </Link>
+          <Link className="hover:text-gray-300" to="/register">
+            Register
+          </Link>
+          <Link className="hover:text-gray-300" to="/cart">
+            Cart
+          </Link>
+        </nav>
+      </header>
 
-export function ErrorBoundary({ error }: Route.ErrorBoundaryProps) {
-  let message = "Oops!";
-  let details = "An unexpected error occurred.";
-  let stack: string | undefined;
+      {/* Page content */}
+      <main className="max-w-6xl mx-auto p-6">
+        <Outlet />
+      </main>
 
-  if (isRouteErrorResponse(error)) {
-    message = error.status === 404 ? "404" : "Error";
-    details =
-      error.status === 404
-        ? "The requested page could not be found."
-        : error.statusText || details;
-  } else if (import.meta.env.DEV && error && error instanceof Error) {
-    details = error.message;
-    stack = error.stack;
-  }
-
-  return (
-    <main className="pt-16 p-4 container mx-auto">
-      <h1>{message}</h1>
-      <p>{details}</p>
-      {stack && (
-        <pre className="w-full p-4 overflow-x-auto">
-          <code>{stack}</code>
-        </pre>
-      )}
-    </main>
+      {/* Footer */}
+      <footer className="text-center text-gray-500 py-10">
+        © 2026 My Concert App
+      </footer>
+    </div>
   );
 }
